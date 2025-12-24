@@ -2,21 +2,167 @@ quotes:
   - id: 1
     quote: It is bad for a young man to sin; but it is worse for an old man to sin.
     author: Abu Bakr (R.A)
+    metadata:
+      category: wisdom
+      tags:
+        - morality
+        - age
+      verified: true
+      rating: 4.5
   - id: 2
     quote: If You Are Out To Describe The Truth, Leave Elegance To The Tailor.
     author: Albert Einstein
+    metadata:
+      category: science
+      tags:
+        - truth
+        - simplicity
+      verified: true
+      rating: 4.8
   - id: 3
     quote: >-
       O man you are busy working for the world, and the world is busy trying to
       turn you out.
     author: Abu Bakr (R.A)
+    metadata:
+      category: wisdom
+      tags:
+        - life
+        - philosophy
+      verified: true
+      rating: 4.2
   - id: 4
-    quote: >-
-      While children are struggling to be unique, the world around them is
-      trying all means to make them look like everybody else.
+    quote: |
+      While children are struggling to be unique,
+      the world around them is trying all means
+      to make them look like everybody else.
     author: Abdul Kalam
+    metadata:
+      category: inspiration
+      tags:
+        - individuality
+        - society
+        - children
+      verified: true
+      rating: 4.7
+      translations:
+        - language: fr
+          text: Les enfants luttent pour être uniques
+        - language: es
+          text: Los niños luchan por ser únicos
   - id: 5
     quote: >-
       These Capitalists Generally Act Harmoniously And In Concert, To Fleece The
       People.
     author: Abraham Lincoln
+    metadata:
+      category: politics
+      tags:
+        - capitalism
+        - economics
+      verified: false
+      rating: 3.9
+      disputed: true
+
+authors:
+  - name: Abu Bakr (R.A)
+    birth_year: 573
+    death_year: 634
+    nationality: Arabian
+    biography:
+      title: First Caliph of Islam
+      description: >
+        Abu Bakr was a senior companion and the father-in-law of the Islamic prophet Muhammad.
+        He ruled over the Rashidun Caliphate from 632-634 CE.
+      notable_works:
+        - Collection of Islamic Teachings
+      influences:
+        - Muhammad (PBUH)
+  - name: Albert Einstein
+    birth_year: 1879
+    death_year: 1955
+    nationality: German
+    biography:
+      title: Theoretical Physicist
+      description: Developed the theory of relativity
+      notable_works:
+        - Theory of Relativity
+        - Photoelectric Effect
+        - Brownian Motion
+      influences:
+        - Isaac Newton
+        - James Clerk Maxwell
+        - Ernst Mach
+  - name: Abdul Kalam
+    birth_year: 1931
+    death_year: 2015
+    nationality: Indian
+    biography:
+      title: 11th President of India
+      description: Aerospace scientist and statesman
+      notable_works:
+        - Wings of Fire
+        - India 2020
+        - Ignited Minds
+      influences: null
+  - name: Abraham Lincoln
+    birth_year: 1809
+    death_year: 1865
+    nationality: American
+    biography:
+      title: 16th President of the United States
+      description: Led the nation through the Civil War
+      notable_works:
+        - Gettysburg Address
+        - Emancipation Proclamation
+      influences:
+        - Thomas Jefferson
+        - Henry Clay
+
+categories:
+  - name: wisdom
+    description: Quotes about life wisdom and philosophy
+    count: 2
+  - name: science
+    description: Quotes related to scientific thinking
+    count: 1
+  - name: inspiration
+    description: Motivational and inspiring quotes
+    count: 1
+  - name: politics
+    description: Political commentary and observations
+    count: 1
+
+statistics:
+  total_quotes: 5
+  total_authors: 4
+  total_categories: 4
+  average_rating: 4.42
+  verified_percentage: 80.0
+  most_quoted_author: Abu Bakr (R.A)
+  tags_distribution:
+    morality: 1
+    age: 1
+    truth: 1
+    simplicity: 1
+    life: 1
+    philosophy: 1
+    individuality: 1
+    society: 1
+    children: 1
+    capitalism: 1
+    economics: 1
+
+settings:
+  display:
+    show_metadata: true
+    show_author_bio: false
+    max_quote_length: 500
+  filters:
+    min_rating: 3.0
+    verified_only: false
+    allowed_categories:
+      - wisdom
+      - science
+      - inspiration
+      - politics
