@@ -27,6 +27,31 @@ def parse_query(query):
 
     return None, False
 
+def parse_key(key):
+    """Parses key value and key value member index to access"""
+    if "[" in key or "]" in key:
+        if not ("[" in key and "]" in key):
+            raise ValueError(f"Malformed key: '{key}' - missing bracket")
+        
+        open_bracket = key.index('[')
+        close_bracket = key.index(']')
+        
+        if open_bracket >= close_bracket:
+            raise ValueError(f"Malformed key: '{key}' - brackets in wrong order")
+        
+        key_v = key[:open_bracket]
+        memb_index = key[open_bracket+1:close_bracket]
+        
+        if not key_v:
+            raise ValueError(f"Malformed key: '{key}' - empty key name")
+        
+        if not isinstance(memb_index, int):
+            raise ValueError("Index should be a digit")
+        
+        return key_v, memb_index if memb_index else None
+    else:
+        return key, None
+
 def apply_query(data, query):
     """Apply the query to the data"""
     if not query or query == '.':
@@ -40,10 +65,14 @@ def apply_query(data, query):
         return None
 
     if isinstance(data, dict):
-        if key in data:
-            return data[key]
+        key_val, member_index = parse_key(key)
+        if key_val in data:
+            if member_index is None:
+                return data[key_val]
+            else:
+                return data[key_val][member_index]
         elif not optional:
-            raise KeyError(f"Key '{key}' not found")
+            raise KeyError(f"Key '{key_val}' not found")
     elif not optional:
         raise TypeError(f"Cannot index {type(data).__name__} with key")
 
