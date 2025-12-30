@@ -12,18 +12,19 @@ def read_file(filename):
 
 def parse_query(query):
     """Parse the query expression to extract the key and optional flag"""
-    # Match patterns like .[key], .["key"], .key, .key?, etc.
+    # Match patterns like .[key], .["key"], .key, .key[0], etc.
     patterns = [
-        r'^\.\[(["\']?)([^"\'\]]+)\1\]\??$',  # .[key] or .["key"] or .['key'] with optional ?
-        r"^\.([a-zA-Z_][a-zA-Z0-9_]*)\??$",  # .key with optional ?
+        r'^\.\["([^"]+)"\]\??$',  # .["key"] or .["key[0]"] with optional ?
+        r"^\.\['([^']+)'\]\??$",  # .['key'] or .['key[0]'] with optional ?
+        r'^\.\[([^\]]+)\]\??$',  # .[key] or .[key[0]] with optional ?
+        r"^\.([a-zA-Z_][a-zA-Z0-9_]*(?:\[[^\]]*\])*)\??$",  # .key or .key[0] with optional ?
     ]
 
     for pattern in patterns:
         match = re.match(pattern, query)
         if match:
-            # Extract the key (last group is the key name)
-            groups = match.groups()
-            key = groups[-1] if len(groups) > 1 else groups[0]
+            # Extract the key from the captured group
+            key = match.group(1)
             optional = query.endswith("?")
             return key, optional
 

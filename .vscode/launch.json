@@ -17,7 +17,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/ccyq.py",
             "args": [
-                ".quotes",
+                ".quotes[0]",
                 "quotes.yaml"
             ],
             "console": "integratedTerminal"
