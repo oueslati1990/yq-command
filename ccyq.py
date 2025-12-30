@@ -16,7 +16,7 @@ def parse_query(query):
     patterns = [
         r'^\.\["([^"]+)"\]\??$',  # .["key"] or .["key[0]"] with optional ?
         r"^\.\['([^']+)'\]\??$",  # .['key'] or .['key[0]'] with optional ?
-        r'^\.\[([^\]]+)\]\??$',  # .[key] or .[key[0]] with optional ?
+        r"^\.\[([^\]]+)\]\??$",  # .[key] or .[key[0]] with optional ?
         r"^\.([a-zA-Z_][a-zA-Z0-9_]*(?:\[[^\]]*\])*)\??$",  # .key or .key[0] with optional ?
     ]
 
@@ -44,15 +44,16 @@ def parse_key(key):
             raise ValueError(f"Malformed key: '{key}' - brackets in wrong order")
 
         key_v = key[:open_bracket]
-        memb_index = key[open_bracket + 1 : close_bracket]
+        memb_index_str = key[open_bracket + 1 : close_bracket]
+        try:
+            memb_index = int(memb_index_str)
+        except ValueError:
+            raise ValueError(f"Index should be a digit, got : {memb_index_str}")
 
         if not key_v:
             raise ValueError(f"Malformed key: '{key}' - empty key name")
 
-        if not isinstance(memb_index, int):
-            raise ValueError("Index should be a digit")
-
-        return key_v, memb_index if memb_index else None
+        return key_v, memb_index
     else:
         return key, None
 
