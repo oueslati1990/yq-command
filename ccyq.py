@@ -3,17 +3,19 @@ import sys
 import yaml
 import re
 
+
 def read_file(filename):
     """Reads a yaml file"""
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         return yaml.safe_load(f)
+
 
 def parse_query(query):
     """Parse the query expression to extract the key and optional flag"""
     # Match patterns like .[key], .["key"], .key, .key?, etc.
     patterns = [
         r'^\.\[(["\']?)([^"\'\]]+)\1\]\??$',  # .[key] or .["key"] or .['key'] with optional ?
-        r'^\.([a-zA-Z_][a-zA-Z0-9_]*)\??$'     # .key with optional ?
+        r"^\.([a-zA-Z_][a-zA-Z0-9_]*)\??$",  # .key with optional ?
     ]
 
     for pattern in patterns:
@@ -22,39 +24,41 @@ def parse_query(query):
             # Extract the key (last group is the key name)
             groups = match.groups()
             key = groups[-1] if len(groups) > 1 else groups[0]
-            optional = query.endswith('?')
+            optional = query.endswith("?")
             return key, optional
 
     return None, False
+
 
 def parse_key(key):
     """Parses key value and key value member index to access"""
     if "[" in key or "]" in key:
         if not ("[" in key and "]" in key):
             raise ValueError(f"Malformed key: '{key}' - missing bracket")
-        
-        open_bracket = key.index('[')
-        close_bracket = key.index(']')
-        
+
+        open_bracket = key.index("[")
+        close_bracket = key.index("]")
+
         if open_bracket >= close_bracket:
             raise ValueError(f"Malformed key: '{key}' - brackets in wrong order")
-        
+
         key_v = key[:open_bracket]
-        memb_index = key[open_bracket+1:close_bracket]
-        
+        memb_index = key[open_bracket + 1 : close_bracket]
+
         if not key_v:
             raise ValueError(f"Malformed key: '{key}' - empty key name")
-        
+
         if not isinstance(memb_index, int):
             raise ValueError("Index should be a digit")
-        
+
         return key_v, memb_index if memb_index else None
     else:
         return key, None
 
+
 def apply_query(data, query):
     """Apply the query to the data"""
-    if not query or query == '.':
+    if not query or query == ".":
         return data
 
     key, optional = parse_query(query)
@@ -78,29 +82,34 @@ def apply_query(data, query):
 
     return None
 
+
 def main():
     """Main logic"""
-    parser = argparse.ArgumentParser(
-        description="ccyq command"
+    parser = argparse.ArgumentParser(description="ccyq command")
+    parser.add_argument(
+        "query",
+        nargs="?",
+        default=".",
+        help="query expression (e.g., .quotes, .[quotes], .quotes?)",
     )
-    parser.add_argument('query', nargs='?', default='.',
-                        help="query expression (e.g., .quotes, .[quotes], .quotes?)")
-    parser.add_argument('filename', nargs='?', default=None,
-                        help="file to read")
+    parser.add_argument("filename", nargs="?", default=None, help="file to read")
     args = parser.parse_args()
 
-    content = ''
+    content = ""
     try:
         if args.filename:
             content = read_file(args.filename)
         else:
-            stdin_content = sys.stdin.buffer.read().decode('utf-8')
+            stdin_content = sys.stdin.buffer.read().decode("utf-8")
             content = yaml.safe_load(stdin_content)
     except FileNotFoundError:
-        print(f'file {args.filename} does not exist', file=sys.stderr)
+        print(f"file {args.filename} does not exist", file=sys.stderr)
         sys.exit(1)
     except PermissionError:
-        print(f'You are not permitted to access this file : {args.filename}', file=sys.stderr)
+        print(
+            f"You are not permitted to access this file : {args.filename}",
+            file=sys.stderr,
+        )
         sys.exit(1)
     except IOError as e:
         print(f"{args.filename}: {e}", file=sys.stderr)
@@ -112,10 +121,11 @@ def main():
     try:
         result = apply_query(content, args.query)
         if result is not None:
-            print(yaml.dump(result, default_flow_style=False, sort_keys=False), end='')
+            print(yaml.dump(result, default_flow_style=False, sort_keys=False), end="")
     except (KeyError, ValueError, TypeError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
