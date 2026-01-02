@@ -63,6 +63,14 @@ def apply_query(data, query):
     if not query or query == ".":
         return data
 
+    if "|" in query:
+        # Split by pipe and apply filters sequentially
+        filters = [f.strip() for f in query.split("|")]
+        result = data
+        for filter_expr in filters:
+            result = apply_query(result, filter_expr)
+        return result
+
     key, optional = parse_query(query)
 
     if key is None:
